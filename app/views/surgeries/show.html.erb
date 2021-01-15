@@ -2,3 +2,25 @@
 
 <h4>Surgery ID: <%= @surgery.id %></h4>
 <h4>Operating Room: #<%= @surgery.operating_room %></h4>
+<h4>Day of Week: <%= @surgery.day %></h4>
+
+<section id='same-day-surgeries'>
+  <h4>Other surgeries happening this day of the week:</h4>
+  <ul>
+    <% @surgery.same_day_surgeries.each do |surgery| %>
+      <li><%= surgery.title %></li>
+    <% end %>
+  </ul>
+</section>
+
+<%= render partial: 'doctor_list', locals: { surgery: @surgery } %>
+
+<section>
+  <h4>Add A Doctor To This Surgery</h4>
+  <%= form_with model: DoctorSurgery.new, local: true do |f| %>
+    <%= f.label :name, 'Name' %>
+    <%= f.text_field :name %>
+    <%= f.hidden_field :surgery_id, value: @surgery.id %>
+    <%= f.submit 'Add to Surgery' %>
+  <% end %>
+</section>
