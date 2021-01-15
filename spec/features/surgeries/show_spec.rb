@@ -25,6 +25,54 @@ RSpec.describe 'surgery show page', type: :feature do
       
       expect(page).to have_content(@surgery_1.title)
       expect(page).to have_content(@surgery_1.operating_room)
+      expect(page).to have_content(@surgery_1.day)
+
+      visit surgery_path(@surgery_2)
+      
+      expect(page).to have_content(@surgery_2.title)
+      expect(page).to have_content(@surgery_2.operating_room)
+      expect(page).to have_content(@surgery_2.day)
     end
+
+    it 'has a section listing titles of other surgeries happening the same day' do
+      surgery_3 = Surgery.create!(title: 'ANOTHER Brain Surgery?', day: 'Tuesday', operating_room: 3)
+      surgery_4 = Surgery.create!(title: 'ANOTHER Another Brain Surgery?', day: 'Tuesday', operating_room: 4)
+
+      visit surgery_path(@surgery_1)
+      
+      within('#same-day-surgeries') do
+        expect(page).to have_content(@surgery_2.title)
+        expect(page).to_not have_content(surgery_3.title)
+        expect(page).to_not have_content(surgery_4.title)
+      end
+
+      surgery_3.update!(day: 'Monday')
+      surgery_4.update!(day: 'Monday')
+
+      visit surgery_path(@surgery_1)
+
+      within('#same-day-surgeries') do
+        expect(page).to have_content(@surgery_2.title)
+        expect(page).to have_content(surgery_3.title)
+        expect(page).to have_content(surgery_4.title)
+      end
+    end
+
+    it 'i can search by partial name to add existing doctors to the surgery' do
+      visit surgery_path(@surgery_2)
+        expect(page).to have_content('Add A Doctor To This Surgery')
+        expect(page).to_not have_content(@doctor_4.name)
+        expect(page).to_not have_content(@doctor_1.name)
+        
+        fill_in 'Name', with: 'Derek'
+        click_button 'Add to Surgery'
+
+        expect(page).to have_content(@doctor_4.name)
+        
+        fill_in 'Name', with: 'Meredith Grey'
+        click_button 'Add to Surgery'
+
+        expect(page).to have_content(@doctor_1.name)
+      end
   end
 end
