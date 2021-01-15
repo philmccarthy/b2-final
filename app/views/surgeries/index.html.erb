@@ -2,9 +2,9 @@
 
 <% @surgeries.each do |surgery| %>
   <section id="surgery-<%= surgery.id %>">
-    <h2><%= surgery.title %></h2>
+    <h2 id="show-surgery-<%= surgery.id %>"><%= link_to surgery.title, surgery_path(surgery) %></h2>
+    <h4>Attending Doctors:</h4>
     <ul>
-    er
     <% surgery.doctors.each do |doctor| %>
       <li><%= doctor.name %></li>
     <% end %>
