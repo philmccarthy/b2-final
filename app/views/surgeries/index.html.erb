@@ -2,12 +2,8 @@
 
 <% @surgeries.each do |surgery| %>
   <section id="surgery-<%= surgery.id %>">
-    <h2 id="show-surgery-<%= surgery.id %>"><%= link_to surgery.title, surgery_path(surgery) %></h2>
+    <h2><%= link_to surgery.title, surgery_path(surgery), id: "show-surgery-#{surgery.id}" %></h2>
     <h4>Attending Doctors:</h4>
-    <ul>
-    <% surgery.doctors.each do |doctor| %>
-      <li><%= doctor.name %></li>
-    <% end %>
-    </ul>
+    <%= render partial: 'doctor_list', locals: { surgery: surgery } %>
   </section>
 <% end %>

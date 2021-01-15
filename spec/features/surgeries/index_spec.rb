@@ -44,12 +44,15 @@ RSpec.describe 'surgeries index', type: :feature do
       within("#surgery-#{@surgery_1.id}") do
         expect(current_path).to eq(surgeries_path)
         
-        expect(page).to have_link('View Surgery Details', href: surgery_path(@surgery_1)
+        expect(page).to have_link(@surgery_1.title, href: surgery_path(@surgery_1))
 
         find("#show-surgery-#{@surgery_1.id}").click
 
-        expect(current_path).to eq(surgery_path(@surgery_1)
+        expect(current_path).to eq(surgery_path(@surgery_1))
       end
+    end
+
+    it 'i can search for and add existing doctors to the surgery' do
     end
   end
 end
