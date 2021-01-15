@@ -18,7 +18,6 @@ RSpec.describe 'surgeries index', type: :feature do
       @surgery_2 = Surgery.create!(title: 'Open Heart Surgery', day: 'Monday', operating_room: 2)
       DoctorSurgery.create!(doctor: @doctor_2, surgery: @surgery_2)
       DoctorSurgery.create!(doctor: @doctor_3, surgery: @surgery_2)
-      
     end
 
     it 'i see the title of all surgeries and all doctors performing each surgery' do
@@ -37,7 +36,20 @@ RSpec.describe 'surgeries index', type: :feature do
         expect(page).to have_content(@doctor_2.name)
         expect(page).to have_content(@doctor_3.name)
       end      
-      
+    end
+
+    it 'i can click on any surgery title to go to surgery show page' do
+      visit surgeries_path
+
+      within("#surgery-#{@surgery_1.id}") do
+        expect(current_path).to eq(surgeries_path)
+        
+        expect(page).to have_link('View Surgery Details', href: surgery_path(@surgery_1)
+
+        find("#show-surgery-#{@surgery_1.id}").click
+
+        expect(current_path).to eq(surgery_path(@surgery_1)
+      end
     end
   end
 end
